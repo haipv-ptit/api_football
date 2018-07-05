@@ -31,7 +31,7 @@ module.exports = {
                 let data = null;
                 if(results && results.length > 0) {
                     data = results[0];
-                    result['created_at'] = Date.parse(result['created_at'])/1000;
+                    data['created_at'] = Date.parse(data['created_at'])/1000;
                     let content = data['content'];
                     if(content !== null && content !== "") {
                         data['content'] = REPOSITORY_TEMPLATE.replace("{$content}", content);
