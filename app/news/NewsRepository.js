@@ -8,8 +8,8 @@ const REPOSITORY_TEMPLATE = '<html>'+
 '			body {'+
 '				margin: 0 !important;'+
 '				padding: 0 !important;'+
-'               font-family: serif !important;'+
-'				font-size: 18px !important;'+
+'               font-family: arial !important;'+
+'				font-size: 14px !important;'+
 '               color: #1f1f1f!important;'+
 '			}'+
 '			img {'+
