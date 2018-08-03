@@ -8,7 +8,9 @@ const REPOSITORY_TEMPLATE = '<html>'+
 '			body {'+
 '				margin: 0 !important;'+
 '				padding: 0 !important;'+
-'				font-size: 20px;'+
+'               font-family: serif !important;'+
+'				font-size: 18px !important;'+
+'               color: #1f1f1f!important;'+
 '			}'+
 '			img {'+
 '				max-width: 100% !important;'+
