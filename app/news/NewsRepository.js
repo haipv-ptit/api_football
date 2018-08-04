@@ -1,3 +1,4 @@
+'use strict';
 const db = require('../../db');
 
 const REPOSITORY_TEMPLATE = '<html>'+
@@ -22,25 +23,26 @@ const REPOSITORY_TEMPLATE = '<html>'+
 '	</body>'+
 '</html>';
 
-module.exports = {
-    getNewsDetail: (newsId, callback) => {
+class NewsRepository {
+
+    async getNewsDetail(newsId) {
         let conn = db.getDb();
-        let sql = 'SELECT * FROM news__news WHERE id = '+newsId;
-        conn.query(sql, (err, results)=> {
-            if(err) {
-                callback(null);
-            } else {
+        let sql =  `SELECT * FROM news__news WHERE id = ${newsId} LIMIT 1`;
+        return await new Promise(resolve => {
+            conn.query(sql, (err, results) => {
                 let data = null;
                 if(results && results.length > 0) {
                     data = results[0];
-                    data['created_at'] = Date.parse(data['created_at'])/1000;
+                    data['created_at'] = Date.parse(`${data['created_at']}`)/1000 - 25200; // GMT+7
                     let content = data['content'];
                     if(content !== null && content !== "") {
                         data['content'] = REPOSITORY_TEMPLATE.replace("{$content}", content);
                     }
                 }
-                callback(data);
-            }
-        })
+                resolve(data);
+            });
+        });
     }
 }
+
+module.exports = NewsRepository;
