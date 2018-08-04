@@ -75,7 +75,7 @@ class NewsRepository {
             where += ` AND t2.term_id = ${params.term_id} `;
         }
         // Order by
-        if (params.order_by !== '' && params.order) {
+        if (params.order_by && params.order) {
             let _order = params.order === 'ascending' ? 'asc' : 'desc';
             order_by = ` ORDER BY t1.${params.order_by} ${_order} `;
         } else {
@@ -84,7 +84,7 @@ class NewsRepository {
         // Paging
         let per_page = (params.per_page)? params.per_page : 10;
         let page = (params.page)? params.page : 1;
-        let limit = ` LIMIT ${1+(page-1)*per_page}, ${page*10} `;
+        let limit = ` LIMIT ${1+(page-1)*per_page}, ${per_page} `;
         sql += ` ${where} ${order_by} ${limit} `;
         //console.log(sql);
         conn.query(sql, (err, results) => {
