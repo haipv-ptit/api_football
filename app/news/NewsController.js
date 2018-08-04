@@ -4,7 +4,7 @@ const NewsRepository = require('./NewsRepository');
 
 router.get('/get/:id', function(req, res, next) {
 	let repository = new NewsRepository();
-	repository.getNewsDetail(req.params.id).then(result => {
+	repository.getNewsDetail(req.params.id, result => {
 		res.json({'data': result});
 	});
 });

@@ -25,22 +25,20 @@ const REPOSITORY_TEMPLATE = '<html>'+
 
 class NewsRepository {
 
-    async getNewsDetail(newsId) {
+    getNewsDetail(newsId, callback) {
         let conn = db.getDb();
         let sql =  `SELECT * FROM news__news WHERE id = ${newsId} LIMIT 1`;
-        return await new Promise(resolve => {
-            conn.query(sql, (err, results) => {
-                let data = null;
-                if(results && results.length > 0) {
-                    data = results[0];
-                    data['created_at'] = Date.parse(`${data['created_at']}`)/1000 - 25200; // GMT+7
-                    let content = data['content'];
-                    if(content !== null && content !== "") {
-                        data['content'] = REPOSITORY_TEMPLATE.replace("{$content}", content);
-                    }
+        conn.query(sql, (err, results) => {
+            let data = null;
+            if(results && results.length > 0) {
+                data = results[0];
+                data['created_at'] = Date.parse(`${data['created_at']}`)/1000 - 25200; // GMT+7
+                let content = data['content'];
+                if(content !== null && content !== "") {
+                    data['content'] = REPOSITORY_TEMPLATE.replace("{$content}", content);
                 }
-                resolve(data);
-            });
+            }
+            callback(data);
         });
     }
 }
