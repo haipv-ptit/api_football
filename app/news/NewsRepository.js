@@ -54,7 +54,7 @@ class NewsRepository {
             where += ` AND is_active = ${params.is_active} `;
         }
         if(params.language) {
-            where += ` AND language IN ('all', '${params.is_active}') `;
+            where += ` AND language IN ('all', '${params.language}') `;
         }
         if(params.layout_type) {
             where += ` AND layout_type = ${params.layout_type} `;
