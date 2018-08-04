@@ -41,6 +41,64 @@ class NewsRepository {
             callback(data);
         });
     }
+
+    getNewsBy(params, callback) {
+        let conn = db.getDb();
+        let where = ` WHERE 1 `;
+        let order_by = ``;
+        let sql =  `SELECT t1.id, vid, type, title, thumbnail, description, source, url, order_time, layout_type, object_type, t1.created_at FROM news__news AS t1 `;
+        if(params.type) {
+            where += ` AND type = '${params.type}' `;
+        }
+        if(params.is_active) {
+            where += ` AND is_active = ${params.is_active} `;
+        }
+        if(params.language) {
+            where += ` AND language IN ('all', '${params.is_active}') `;
+        }
+        if(params.layout_type) {
+            where += ` AND layout_type = ${params.layout_type} `;
+        }
+        if(params.sofa_id) {
+            //TODO
+        } else {
+            if(params.object_type) {
+                where += ` AND object_type = '${params.object_type}' `;
+            }
+            if(params.object_id) {
+                where += ` AND object_id = ${params.object_id} `;
+            }
+        }
+        // Category
+        if(params.term_id) {
+            sql += ` INNER JOIN taxonomy__termables t2 ON t1.id = t2.termable_id `;
+            where += ` AND t2.term_id = ${params.term_id} `;
+        }
+        // Order by
+        if (params.order_by !== '' && params.order) {
+            let _order = params.order === 'ascending' ? 'asc' : 'desc';
+            order_by = ` ORDER BY t1.${params.order_by} ${_order} `;
+        } else {
+            order_by = ` ORDER BY t1.created_at DESC `;
+        }
+        // Paging
+        let per_page = (params.per_page)? params.per_page : 10;
+        let page = (params.page)? params.page : 1;
+        let limit = ` LIMIT ${1+(page-1)*per_page}, ${page*10} `;
+        sql += ` ${where} ${order_by} ${limit} `;
+        //console.log(sql);
+        conn.query(sql, (err, results) => {
+            let data = null;
+            if(results) {
+                let n = results.length;
+                for(let i = 0; i < n; i++) {
+                    results[i]['created_at'] = Date.parse(`${results[i]['created_at']}`)/1000 - 25200; // GMT+7;
+                }
+                data = results;
+            }
+            callback(data);
+        });
+    }
 }
 
 module.exports = NewsRepository;

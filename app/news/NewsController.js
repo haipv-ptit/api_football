@@ -1,10 +1,17 @@
 var express = require('express');
 var router = express.Router();
-const NewsRepository = require('./NewsRepository');
+var NewsRepository = require('./NewsRepository');
 
 router.get('/get/:id', function(req, res, next) {
 	let repository = new NewsRepository();
 	repository.getNewsDetail(req.params.id, result => {
+		res.json({'data': result});
+	});
+});
+
+router.get('/', function(req, res, next) {
+	let repository = new NewsRepository();
+	repository.getNewsBy(req.query, result => {
 		res.json({'data': result});
 	});
 });
