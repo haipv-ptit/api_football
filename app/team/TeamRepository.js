@@ -9,7 +9,7 @@ class TeamRepository {
         + ` FROM football.fbc__teamleagueseasons AS t1 ` 
         + ` INNER JOIN football.fbc__league_seasons AS t2 ON t1.league_season_id = t2.id `
         + ` INNER JOIN football.fbc__leagues AS t3 ON t2.league_id = t3.id `
-        + ` WHERE t1.team_id = ${team_id} AND t2.season_id = ${season_id} `;
+        + ` WHERE t1.team_id = ${team_id} AND t2.season_id = ${season_id} ORDER BY t1.priority DESC `;
 
         return await new Promise(resolve => {
             conn.query(sql, (err, results) => {
