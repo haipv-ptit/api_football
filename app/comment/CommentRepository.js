@@ -4,6 +4,23 @@ const commentTransfomer = require('./CommentTransformer');
 
 class CommentRepository {
 
+    async saveComment(user_id, content, object_type, object_id, sofa_id) {
+        let conn = db.getDb();
+        let created_at = conn.escape(new Date());
+        let sql = `INSERT INTO football.fbc__comments (user_id, content, object_type, object_id, sofa_id, created_at, updated_at) `
+        + ` VALUES (${user_id}, '${content}', '${object_type}', '${object_id}', '${sofa_id}', ${created_at}, ${created_at} )`;
+
+        return await new Promise(resolve => {
+            conn.query(sql, (err, result) => {
+                if(err) {
+                    resolve(null);
+                    return;
+                }
+                resolve({"id": result.insertId});
+            });
+        });
+    }
+
     async getComments(params) {
         let conn = db.getDb();
         let sql =  `SELECT t1.id, t1.content, t1.created_at, t1.object_id, t1.object_type, t1.user_id, t1.sofa_id, `
