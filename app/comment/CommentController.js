@@ -13,8 +13,8 @@ router.get('/', function(req, res, next) {
 router.post('/', auth, function(req, res, next) {
 	let content = req.body.content? req.body.content : '';
 	let object_type = req.body.object_type? req.body.object_type : '';
-	let object_id = req.body.object_id? req.body.object_id : '';
-	let sofa_id = req.body.sofa_id? req.body.sofa_id : '';
+	let object_id = req.body.object_id? req.body.object_id : 0;
+	let sofa_id = req.body.sofa_id? req.body.sofa_id : 0;
 	if(content.trim() === '' || !object_type) {
 		return res.status(400).send(JSON.stringify({'errors': true, 'message': 'Tham số truyền vào không hợp lệ'}));
 	}
