@@ -84,7 +84,7 @@ class NewsRepository {
         // Paging
         let per_page = (params.per_page)? params.per_page : 10;
         let page = (params.page)? params.page : 1;
-        let limit = ` LIMIT ${1+(page-1)*per_page}, ${per_page} `;
+        let limit = ` LIMIT ${(page-1)*per_page}, ${per_page} `;
         sql += ` ${where} ${order_by} ${limit} `;
         //console.log(sql);
         conn.query(sql, (err, results) => {
