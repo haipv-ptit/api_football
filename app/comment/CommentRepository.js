@@ -21,6 +21,23 @@ class CommentRepository {
         });
     }
 
+    async reportComment(user_id, content, comment_id) {
+        let conn = db.getDb();
+        let now = new Date();
+        let created_at = conn.escape(now);
+        let sql = `INSERT INTO football.fbc__comment_reports (user_id, content, comment_id, created_at, updated_at) `
+        + ` VALUES (${user_id}, '${content}', ${comment_id}, ${created_at}, ${created_at} )`;
+        return await new Promise(resolve => {
+            conn.query(sql, (err, result) => {
+                if(err) {
+                    resolve(null);
+                    return;
+                }
+                resolve({id: result.insertId, user_id: user_id, comment_id: comment_id, created_at: Math.round(now.getTime()/1000) - 25200});
+            });
+        });
+    }
+
     async getComments(params) {
         let conn = db.getDb();
         let sql =  `SELECT t1.id, t1.content, t1.created_at, t1.object_id, t1.object_type, t1.user_id, t1.sofa_id, `
