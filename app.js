@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express();
 const bodyParser = require('body-parser');
+require('./config');
+var db = require('./db');
 
 var news = require('./app/news/NewsController');
 var app_client = require('./app/app/AppController');
@@ -8,7 +10,6 @@ var team = require('./app/team/TeamController');
 var comment = require('./app/comment/CommentController');
 
 var apiRoutes = express.Router();
-var db = require('./db');
 
 // body parse
 app.use(bodyParser.urlencoded({ extended: true }));

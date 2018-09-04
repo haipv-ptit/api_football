@@ -7,7 +7,14 @@ const config = {
         user: process.env.MYSQL_USER,
         password: process.env.MYSQL_PASS,
         database: process.env.MYSQL_DB
+    },
+    redis: {
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT,
+        ttl: process.env.REDIS_TTL,
+        pass: process.env.REDIS_PASS,
+        database: process.env.REDIS_DB
     }
 };
 
-module.exports = config;
+global.config = config;

@@ -25,21 +25,19 @@ const REPOSITORY_TEMPLATE = '<html>'+
 
 class NewsRepository {
 
-    getNewsDetail(newsId, callback) {
-        let conn = db.getDb();
-        let sql =  `SELECT * FROM news__news WHERE id = ${newsId} LIMIT 1`;
-        conn.query(sql, (err, results) => {
-            let data = null;
-            if(results && results.length > 0) {
-                data = results[0];
-                data['created_at'] = Date.parse(`${data['created_at']}`)/1000 - 25200; // GMT+7
-                let content = data['content'];
-                if(content !== null && content !== "") {
-                    data['content'] = REPOSITORY_TEMPLATE.replace("{$content}", content);
-                }
-            }
-            callback(data);
-        });
+    static async getNewsDetail(newsId) {
+        let key = `:football_api:news:id_${newsId}`;
+        let resCached = await _findCachedByKey(key);
+        if(resCached) {
+            return resCached;
+        }
+        let resDb = await _findDbById(newsId);
+        if(resDb) {
+            redisCache.set(key, resDb, {ttl: 1800}); // 30 mins
+            return resDb;
+        }
+        return null;
+
     }
 
     getNewsBy(params, callback) {
@@ -99,6 +97,25 @@ class NewsRepository {
             callback(data);
         });
     }
+}
+
+const _findDbById = async (newsId) => {
+    let conn = db.getDb();
+    let sql =  `SELECT * FROM news__news WHERE id = ${newsId} LIMIT 1`;
+    return new Promise((resolve, reject) => {
+        conn.query(sql, async (err, results) => {
+            let data = null;
+            if(results && results.length > 0) {
+                data = results[0];
+                data['created_at'] = Date.parse(`${data['created_at']}`)/1000 - 25200; // GMT+7
+                let content = data['content'];
+                if(content !== null && content !== "") {
+                    data['content'] = REPOSITORY_TEMPLATE.replace("{$content}", content);
+                }
+            }
+            resolve(data);
+        });
+    });
 }
 
 module.exports = NewsRepository;
