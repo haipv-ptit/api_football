@@ -11,7 +11,7 @@ class AppRepository {
         }
         let resDb = await _getConfigByKey(app_key);
         if(resDb) {
-            redisCache.set(key, resDb, {ttl: 3600}); // 60 mins
+            redisCache.set(key, resDb, {ttl: 21600}); // 6 hours
             return resDb;
         }
         return null;
@@ -25,7 +25,7 @@ class AppRepository {
         }
         let resDb = await _getConfigById(app_id);
         if(resDb) {
-            redisCache.set(key, resDb, {ttl: 3600}); // 60 mins
+            redisCache.set(key, resDb, {ttl: 21600}); // 6 hours
             return resDb;
         }
         return null;
