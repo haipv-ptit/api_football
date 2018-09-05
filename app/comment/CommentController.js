@@ -4,8 +4,7 @@ var CommentRepository = require('./CommentRepository');
 var auth = require('../../middleware/auth');
 
 router.get('/', function(req, res, next) {
-	let repository = new CommentRepository();
-	repository.getComments(req.query).then(results => {
+	CommentRepository.getComments(req.query).then(results => {
 		res.json({'data': results});
 	});
 });

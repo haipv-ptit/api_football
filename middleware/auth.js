@@ -11,8 +11,7 @@ module.exports = function(req, res, next) {
         return res.status(401).json({});
     }
     access_token = access_token.replace('Bearer ', '');
-    let repository = new UserRepository();
-    repository.validateAccessToken(access_token)
+    UserRepository.validateAccessToken(access_token)
     .then(function(data) {
         if (!data || !data.user_id) {
             return res.status(403).json({});

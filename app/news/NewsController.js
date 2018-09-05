@@ -9,8 +9,7 @@ router.get('/get/:id', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-	let repository = new NewsRepository();
-	repository.getNewsBy(req.query, result => {
+	NewsRepository.getNewsBy(req.query).then(result => {
 		res.json({'data': result});
 	});
 });
